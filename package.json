@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "dependencies": {
+    "cloudinary": "^1.41.3",
+    "lucide-react": "^0.554.0",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0"
+  }
+}
