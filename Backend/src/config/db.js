@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const connectDB = async () => {
   try {
-    const uri = process.env.MONGODB_URL;
+    const uri = process.env.MONGODB_URI;
 
     if (!uri) {
       console.log("❌ MONGODB_URL missing");
