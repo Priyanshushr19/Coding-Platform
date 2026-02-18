@@ -4,6 +4,8 @@ import User from "../models/user.js";
 import validate from "../utils.js/userAuth.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import streamifier from "streamifier";
+import cloudinary from "../utils.js/cloudinary.js";
 
 const register = async (req, res) => {
     try {
@@ -226,43 +228,104 @@ const adminRegister = async (req, res) => {
     }
 }
 
+// const deleteProfile = async (req, res) => {
+
+//     try {
+//         const userId = req.user._id;
+
+//         await User.findByIdAndDelete(userId);
+//         res.status(200).send("Deleted Successfully");
+//     }
+//     catch (err) {
+
+//         res.status(500).send("Internal Server Error");
+//     }
+// }
 const deleteProfile = async (req, res) => {
-
-    try {
-        const userId = req.user._id;
-
-        await User.findByIdAndDelete(userId);
-        res.status(200).send("Deleted Successfully");
-    }
-    catch (err) {
-
-        res.status(500).send("Internal Server Error");
-    }
-}
-
-
-const updateProfilePic = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    const userId = req.user._id;
 
-
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
-      { profilePic: req.file.path }, // Cloudinary URL ✅
-      { new: true }
-    );
-
+    await User.findByIdAndDelete(userId);
 
     res.status(200).json({
       success: true,
-      imageUrl: req.file.path, // ✅ will show cloudinary link
+      message: "Deleted Successfully"
+    });
+
+  } catch (err) {
+    console.error("DELETE ERROR:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+
+const updateProfilePic = async (req, res) => {
+   try {
+    console.log("REQ.FILE:", req.file);
+    console.log("REQ.USER:", req.user);
+
+
+    if (!req.file) {
+      return res.status(400).json({ message: "File not received" });
+    }
+
+    // convert buffer → stream → cloudinary
+    const uploadStream = () =>
+      new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "profilePics" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+
+    const result = await uploadStream();
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { profilePic: result.secure_url },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      imageUrl: result.secure_url,
       user: updatedUser
     });
 
   } catch (err) {
-    res.status(500).json({ message: "Upload failed", error: err.message });
+    console.error("UPLOAD ERROR:", err);
+    res.status(500).json({ message: err.message });
   }
 };
+
+// const updateProfilePic = async (req, res) => {
+//   try {
+//     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+
+
+//     const updatedUser = await User.findByIdAndUpdate(
+//       req.user.id,
+//       { profilePic: req.file.path }, // Cloudinary URL ✅
+//       { new: true }
+//     );
+
+
+//     res.status(200).json({
+//       success: true,
+//       imageUrl: req.file.path, // ✅ will show cloudinary link
+//       user: updatedUser
+//     });
+
+//   } catch (err) {
+//     res.status(500).json({ message: "Upload failed", error: err.message });
+//   }
+// };
 
 
 export { register, login, logout , adminRegister, deleteProfile, updateProfilePic}

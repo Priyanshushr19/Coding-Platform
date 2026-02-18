@@ -3,6 +3,8 @@ import { adminRegister, deleteProfile, login, logout, register, updateProfilePic
 import userMiddleware from "../middleware/userMiddleware.js";
 import adminMiddleware from "../middleware/adminMiddleware.js";
 import User from "../models/user.js";
+import cloudinary from "../utils.js/cloudinary.js";
+import fs from "fs";
 import upload from "../middleware/upload.js";
 
 const authRouter=express.Router()
