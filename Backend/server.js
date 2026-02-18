@@ -15,7 +15,8 @@ import contestRouter from "./src/routes/contestRoutes.js"
 import { connectDB } from "./src/config/db.js"
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    // origin: 'http://localhost:5173',
+    origin:'https://coding-platform-front-end.onrender.com',
     credentials: true 
 }));
 
