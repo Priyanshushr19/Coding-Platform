@@ -1,6 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
 
-// const ai = new GoogleGenAI({apiKey:"AIzaSyApi9LoOdOpUk3Vz4U4o-OkxIhmAutrPSo"});
 
 const solveDoubt = async (req, res) => {
     try {
