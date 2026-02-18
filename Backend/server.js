@@ -12,6 +12,7 @@ import aiRouter from "./src/routes/aiChatting.js"
 import videoRouter from "./src/routes/videoCreator.js"
 import discussionRouter from "./src/routes/discussionRouter.js"
 import contestRouter from "./src/routes/contestRoutes.js"
+import { connectDB } from "./src/config/db.js"
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -33,7 +34,8 @@ app.use("/api/contests",contestRouter);
 app.use(express.urlencoded({ extended: true })); 
 
 const main = async () => {
-    await mongoose.connect(process.env.MONGO_URI);
+    // await mongoose.connect(process.env.MONGO_URI);
+    connectDB()
     console.log("✅ MongoDB Connected");
     await redisClient.connect();
     console.log("✅ Redis Connected");
