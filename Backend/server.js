@@ -13,6 +13,7 @@ import videoRouter from "./src/routes/videoCreator.js"
 import discussionRouter from "./src/routes/discussionRouter.js"
 import contestRouter from "./src/routes/contestRoutes.js"
 import { connectDB } from "./src/config/db.js"
+import { scheduleContestStatusUpdates } from "./src/controllers/contest.js";
 
 app.use(cors({
     origin: [
@@ -43,6 +44,7 @@ const main = async () => {
     await redisClient.connect();
     console.log("✅ Redis Connected");
 
+    scheduleContestStatusUpdates();
     
     // safe Redis connection
     // try {
