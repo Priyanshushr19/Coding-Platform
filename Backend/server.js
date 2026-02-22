@@ -38,7 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const main = async () => {
     // await mongoose.connect(process.env.MONGO_URI);
-    connectDB()
+    await connectDB()
     console.log("✅ MongoDB Connected");
     await redisClient.connect();
     console.log("✅ Redis Connected");
