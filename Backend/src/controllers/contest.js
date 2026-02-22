@@ -1805,11 +1805,11 @@ export const submitContestCode = async (req, res) => {
 };
 
 // Initialize contest scheduler when server starts
-scheduleContestStatusUpdates();
+// scheduleContestStatusUpdates();
 
 
 
 // ... [Keep your other existing functions like getContestProblem, runContestCode, etc.]
 
 // Initialize contest scheduler when server starts
-scheduleContestStatusUpdates();
+// scheduleContestStatusUpdates();
