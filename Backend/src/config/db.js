@@ -4,15 +4,21 @@ export const connectDB = async () => {
   try {
     const uri = process.env.MONGO_URI;
 
+    console.log("ENV URI exists:", !!uri);
+    console.log("Trying to connect to:", uri);
+
     if (!uri) {
-      console.log("❌ MONGODB_URL missing");
-      return;
+      throw new Error("MONGO_URI is missing");
     }
 
-    await mongoose.connect(uri);
-    console.log("✅ MongoDB connected"+uri);
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 5000
+    });
+
+    console.log("✅ MongoDB connected successfully");
 
   } catch (err) {
-    console.log("Mongo error:", err.message);
+    console.log("❌ FULL MongoDB Error:");
+    console.log(err);
   }
 };
