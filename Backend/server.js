@@ -44,7 +44,7 @@ const main = async () => {
     await redisClient.connect();
     console.log("✅ Redis Connected");
 
-    scheduleContestStatusUpdates();
+    // scheduleContestStatusUpdates();
     
     // safe Redis connection
     // try {
