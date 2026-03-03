@@ -23,6 +23,7 @@ const userMiddleware = async (req, res, next) => {
 
     // Attach user to request for next middleware or route
     req.user = user;
+    console.log("Cookies received:", req.cookies);
 
     // Move to the next middleware
     next();
