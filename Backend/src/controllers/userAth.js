@@ -60,7 +60,8 @@ const register = async (req, res) => {
         res.cookie("token", token, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: "strict",
+            secure: true,
+            sameSite: "None",
             secure: process.env.NODE_ENV === "production",  // true only in prod
         });
 
