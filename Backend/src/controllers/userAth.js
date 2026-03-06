@@ -113,10 +113,66 @@ const register = async (req, res) => {
 // }
 
 
+// const login = async (req, res) => {
+//   try {
+//     console.log("BODY RECEIVED:", req.body);
+
+//     const { emailId, password } = req.body;
+
+//     if (!emailId || !password) {
+//       return res.status(400).json({ message: "Invalid Credentials" });
+//     }
+
+//     const user = await User.findOne({ emailId });
+
+//     if (!user) {
+//       return res.status(401).json({ message: "Invalid Credentials" });
+//     }
+
+//     const match = await bcrypt.compare(password, user.password);
+
+//     if (!match) {
+//       return res.status(401).json({ message: "Invalid Credentials" })
+//     }
+
+//     const reply = {
+//     firstName: user.firstName || "User",
+//       emailId: user.emailId,
+//       _id: user._id,
+//       role: user.role,
+//     };
+
+//     // const token = jwt.sign(
+//     //   { _id: user._id, emailId: emailId, role: user.role },
+//     //   process.env.JWT_KEY,
+//     //   { expiresIn: "1h" }
+//     // );
+//     res.cookie("token", token, {
+//       httpOnly: true,
+//       secure: true,        // production me required
+//       sameSite: "none",    // cross-domain ke liye required
+//       maxAge: 60 * 60 * 1000
+//     });
+      
+//     res.cookie("token", token, {
+//       httpOnly: true,
+//       sameSite: "lax",
+//       maxAge: 60 * 60 * 1000
+//     });
+
+//     res.status(200).json({
+//       user: reply,
+//       message: "Login Successful"
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error.message || "Server error"
+//     });
+//   }
+// };
 const login = async (req, res) => {
   try {
-    console.log("BODY RECEIVED:", req.body);
-
     const { emailId, password } = req.body;
 
     if (!emailId || !password) {
@@ -132,31 +188,26 @@ const login = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).json({ message: "Invalid Credentials" })
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
 
+    const token = jwt.sign(
+      { _id: user._id, emailId: user.emailId, role: user.role },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
+
     const reply = {
-    firstName: user.firstName || "User",
+      firstName: user.firstName,
       emailId: user.emailId,
       _id: user._id,
       role: user.role,
     };
 
-    // const token = jwt.sign(
-    //   { _id: user._id, emailId: emailId, role: user.role },
-    //   process.env.JWT_KEY,
-    //   { expiresIn: "1h" }
-    // );
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,        // production me required
-      sameSite: "none",    // cross-domain ke liye required
-      maxAge: 60 * 60 * 1000
-    });
-      
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "None",
       maxAge: 60 * 60 * 1000
     });
 
