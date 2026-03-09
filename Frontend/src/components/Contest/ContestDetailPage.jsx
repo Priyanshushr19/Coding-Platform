@@ -41,7 +41,7 @@ const ContestDetail = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch(`/api/contests/${id}/register`, {
+      const response = await axiosClient(`/api/contests/${id}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
