@@ -224,19 +224,30 @@ const getProblemById = async (req, res) => {
 
 
 // -------------------------- Get All Problems --------------------------
+// const getAllProblem = async (req, res) => {
+//     try {
+//         const problems = await Problem.find({}).select("_id title difficulty tags");
+//         // const problems = await Problem.find({})
+
+
+//         if (problems.length === 0)
+//             return res.status(404).send("No problems found");
+
+//         return res.status(200).send(problems);
+
+//     } catch (error) {
+//         return res.status(500).send("Error: " + error);
+//     }
+// };
 const getAllProblem = async (req, res) => {
     try {
         const problems = await Problem.find({}).select("_id title difficulty tags");
-        // const problems = await Problem.find({})
 
-
-        if (problems.length === 0)
-            return res.status(404).send("No problems found");
-
-        return res.status(200).send(problems);
+        return res.status(200).json(problems);   // always return array
 
     } catch (error) {
-        return res.status(500).send("Error: " + error);
+        console.error("GET ALL PROBLEM ERROR:", error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
