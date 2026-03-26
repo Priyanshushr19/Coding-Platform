@@ -71,7 +71,9 @@ React Frontend (Monaco Editor, Redux, Tailwind)
 Express.js Backend (Auth, Rate Limit, File Upload)
 ↓
 ┌────┼────┬────────────┐
+
 ↓ ↓ ↓ ↓
+
 MongoDB Redis Judge0 Gemini AI
 (Data) (Cache) (Execution) (Assistance)
 
@@ -117,14 +119,23 @@ docker run -d -p 6379:6379 redis
 #Backend (.env)
 
 PORT=5000
+
 MONGODB_URI=mongodb://localhost:27017/coderunner
+
 REDIS_URL=redis://localhost:6379
+
 JWT_SECRET=your_secret_key
+
 JUDGE0_API_KEY=your_judge0_key
+
 GEMINI_API_KEY=your_gemini_key
+
 CLOUDINARY_CLOUD_NAME=your_cloud_name
+
 CLOUDINARY_API_KEY=your_api_key
+
 CLOUDINARY_API_SECRET=your_api_secret
+
 FRONTEND_URL=http://localhost:5173
 
  Security Features
