@@ -224,21 +224,45 @@ const login = async (req, res) => {
   }
 };
 
-
 const logout = async (req, res) => {
     try {
         const { token } = req.cookies;
-        const payload = jwt.decode(token);
 
-        await redisClient.set(`token:${token}`, 'Blocked')
-        await redisClient.expireAt(`token:${token}`, payload.exp)
+        if (token) {
+            const payload = jwt.decode(token);
 
-        res.cookie("token", null, { expires: new Date(Date.now()) })
-        res.send("Logged Out Succesfully");
+            // Blacklist token in Redis
+            await redisClient.set(`token:${token}`, 'Blocked');
+            await redisClient.expireAt(`token:${token}`, payload.exp);
+        }
+
+        // 🔥 Properly clear cookie
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+        });
+
+        res.send("Logged Out Successfully");
     } catch (error) {
         res.status(503).send("Error: " + error);
     }
-}
+};
+
+// const logout = async (req, res) => {
+//     try {
+//         const { token } = req.cookies;
+//         const payload = jwt.decode(token);
+
+//         await redisClient.set(`token:${token}`, 'Blocked')
+//         await redisClient.expireAt(`token:${token}`, payload.exp)
+
+//         res.cookie("token", null, { expires: new Date(Date.now()) })
+//         res.send("Logged Out Succesfully");
+//     } catch (error) {
+//         res.status(503).send("Error: " + error);
+//     }
+// }
 
 // const logout = async (req, res) => {
 //   try {
